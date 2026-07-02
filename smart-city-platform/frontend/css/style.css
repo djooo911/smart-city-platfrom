@@ -1,0 +1,27 @@
+/*
+  Milestone 0 placeholder styling only.
+  Real dashboard styling arrives in Milestone 7.
+*/
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.scaffold-notice {
+  text-align: center;
+  max-width: 480px;
+  padding: 2rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+}
+
+#api-status {
+  font-weight: bold;
+}

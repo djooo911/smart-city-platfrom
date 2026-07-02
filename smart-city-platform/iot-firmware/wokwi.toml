@@ -1,0 +1,8 @@
+# Wokwi simulator project configuration.
+# Points Wokwi at the compiled firmware and the wiring diagram.
+# Firmware path assumes a PlatformIO build (see platformio.ini).
+
+[wokwi]
+version = 1
+firmware = ".pio/build/esp32dev/firmware.bin"
+elf = ".pio/build/esp32dev/firmware.elf"

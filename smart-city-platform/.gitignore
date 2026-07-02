@@ -1,0 +1,39 @@
+# --- Environment / secrets ---
+.env
+*.env.local
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# --- Node (only if a future frontend tool is added) ---
+node_modules/
+
+# --- Docker ---
+*.log
+
+# --- MongoDB local data (if ever run outside Docker volumes) ---
+data/db/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Wokwi / PlatformIO build artifacts ---
+.pio/
+.pioenvs/
+.piolibdeps/
