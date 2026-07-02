@@ -22,7 +22,7 @@ COPY . .
 
 EXPOSE 8000
 
-# --reload is intentionally used for the academic/dev context (docker-compose
-# mounts the source as a volume). For a "production" profile this would be
-# replaced with a plain `uvicorn app.main:app --host 0.0.0.0 --port 8000`.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Production-profile default: no --reload, and the port is read from $PORT
+# so the same image works on hosts that assign their own port (e.g. Render).
+# docker-compose overrides this command with --reload for local development.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

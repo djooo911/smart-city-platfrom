@@ -1,0 +1,27 @@
+# Render Blueprint — deploys the FastAPI backend as a Docker web service.
+# https://render.com/docs/blueprint-spec
+#
+# MongoDB is NOT provisioned here: Render has no managed MongoDB offering.
+# Point MONGO_URI at an external cluster (e.g. a free MongoDB Atlas cluster)
+# by setting it in the Render dashboard (Environment tab) after the first
+# deploy — it's marked sync:false below so it isn't stored in this file.
+
+services:
+  - type: web
+    name: smart-city-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /api/v1/system/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        value: smart_city_db
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ALLOW_ORIGINS
+        value: "*"

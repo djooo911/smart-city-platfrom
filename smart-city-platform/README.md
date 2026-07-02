@@ -68,6 +68,27 @@ smart-city-platform/
    ```
    Add `-v` to also remove the MongoDB data volume (full reset).
 
+## Deploying the Backend on Render
+
+The repo includes a [`render.yaml`](render.yaml) Blueprint that deploys the
+backend as a Docker web service. Render has no managed MongoDB offering, so
+you need a free external cluster (e.g. [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)).
+
+1. Create a free MongoDB Atlas cluster, add a database user, and allow
+   network access from anywhere (`0.0.0.0/0`) — simplest option for an
+   academic project. Copy the connection string.
+2. On [Render](https://dashboard.render.com), click **New > Blueprint** and
+   select this GitHub repo. Render will detect `render.yaml` and propose the
+   `smart-city-backend` service.
+3. Before (or right after) the first deploy, open the service's
+   **Environment** tab and set `MONGO_URI` to your Atlas connection string
+   (it's intentionally left unset in `render.yaml`).
+4. Deploy. Once live, check `https://<your-service>.onrender.com/api/v1/system/health`
+   — it should report `"status": "ok"` with `"mongodb": "ok"`.
+
+Note: the free Render plan spins the service down after inactivity, so the
+first request after idling can take ~30s to respond.
+
 ## Running Tests Locally (without Docker)
 
 ```bash
