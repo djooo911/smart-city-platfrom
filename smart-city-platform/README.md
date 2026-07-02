@@ -1,5 +1,7 @@
 # Smart City Public Lighting and Traffic Monitoring with Blockchain Traceability
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+
 University engineering project. A Smart City platform that simulates
 intelligent street lighting and traffic monitoring, records anomalies and
 infrastructure decisions on a local (non-cryptocurrency) blockchain for
@@ -98,4 +100,4 @@ See `docs/architecture.md` §9 for the full milestone plan. Current status:
 ## License / Academic Context
 
 Developed as a university engineering project. Not intended for production
-deployment as-is.
+deployment as-is. Released under the [MIT License](../LICENSE).
