@@ -108,7 +108,7 @@ lifecycle rather than mocking the database.
 See `docs/architecture.md` §9 for the full milestone plan. Current status:
 
 - [x] **M0** — Project scaffold, Docker Compose, health check
-- [ ] **M1** — Domain & application core (energy optimization, anomaly rules)
+- [x] **M1** — Domain & application core (energy optimization, anomaly rules)
 - [ ] **M2** — Blockchain engine
 - [ ] **M3** — MongoDB repositories & collections
 - [ ] **M4** — REST API layer (lamps, traffic, alerts, blockchain explorer)
