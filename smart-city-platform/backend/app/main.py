@@ -1,18 +1,18 @@
 """
 FastAPI application entrypoint.
 
-Milestone 0 responsibilities ONLY:
+Responsibilities:
     - Construct the FastAPI app.
     - Wire up logging.
-    - Wire up MongoDB connection lifecycle (connect on startup, close on shutdown).
+    - Wire up MongoDB connection lifecycle (connect + ensure indexes on
+      startup, close on shutdown).
     - Register the `system` router (health check) so the stack is verifiable
       end-to-end via Docker Compose.
     - Enable permissive CORS so the static HTML/JS dashboard (served from a
       different port/container) can call the API during local development.
 
 No business routers (lamps, traffic, alerts, blockchain) are registered
-yet — those arrive with their respective milestones, once the underlying
-use cases and repositories exist.
+yet — those arrive with Milestone 4, once use cases exist to back them.
 """
 
 import logging
@@ -23,7 +23,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routers import system
 from app.config import get_settings
-from app.infrastructure.mongo.client import close_mongo_connection, connect_to_mongo
+from app.infrastructure.mongo.client import close_mongo_connection, connect_to_mongo, get_database
+from app.infrastructure.mongo.indexes import ensure_indexes
 from app.logging_config import configure_logging
 
 configure_logging()
@@ -34,6 +35,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     logger.info("Starting up %s", get_settings().app_name)
     connect_to_mongo()
+    await ensure_indexes(get_database())
     yield
     logger.info("Shutting down %s", get_settings().app_name)
     close_mongo_connection()
