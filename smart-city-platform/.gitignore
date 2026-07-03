@@ -1,6 +1,7 @@
 # --- Environment / secrets ---
 .env
 *.env.local
+iot-firmware/src/secrets.h
 
 # --- Python ---
 __pycache__/

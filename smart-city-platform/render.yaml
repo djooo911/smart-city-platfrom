@@ -33,3 +33,5 @@ services:
         generateValue: true
       - key: ADMIN_SEED_PASSWORD
         sync: false
+      - key: DEVICE_SEED_PASSWORD
+        sync: false

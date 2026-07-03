@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     # Used only by infrastructure/mongo/seed.py to create the initial admin
     # user -- not read anywhere else in the app.
     admin_seed_password: str | None = None
+    # Used only by infrastructure/mongo/seed.py to create the shared
+    # operator-role credential the Milestone 5 ESP32 firmware logs in as.
+    device_seed_password: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

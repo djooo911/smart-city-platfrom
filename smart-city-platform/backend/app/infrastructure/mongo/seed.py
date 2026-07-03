@@ -2,13 +2,14 @@
 Seed script — populates a fresh database with sample data for manual
 exploration and demos. Idempotent: upserts lamp nodes (safe to re-run),
 only creates a genesis blockchain if the `blockchain` collection is empty,
-and only creates the default admin user if one doesn't already exist.
+and only creates the admin/device users if they don't already exist.
 
 Run standalone from `backend/`:
     python -m app.infrastructure.mongo.seed
 
-Requires ADMIN_SEED_PASSWORD to be set (see backend/.env.example) --
-fails loudly rather than falling back to a guessable default password.
+Requires ADMIN_SEED_PASSWORD / DEVICE_SEED_PASSWORD to be set (see
+backend/.env.example) to seed the respective user -- each is skipped
+(with a logged warning, not a guessable default) if its password is unset.
 """
 
 import asyncio
@@ -33,6 +34,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 logger = logging.getLogger(__name__)
 
 _ADMIN_USERNAME = "admin"
+_DEVICE_USERNAME = "lamp-device"
 
 _SAMPLE_LAMPS = [
     LampNode(
@@ -59,6 +61,20 @@ _SAMPLE_LAMPS = [
 ]
 
 
+async def _seed_user(
+    user_repository: MongoUserRepository, username: str, password: str | None, role: Role
+) -> None:
+    if await user_repository.get_by_username(username) is not None:
+        logger.info("User %r already exists, skipping", username)
+    elif not password:
+        logger.warning("Password not set for %r -- skipping user creation", username)
+    else:
+        await user_repository.create(
+            User(username=username, password_hash=hash_password(password), role=role)
+        )
+        logger.info("Created user %r (%s)", username, role.value)
+
+
 async def seed(db: AsyncIOMotorDatabase) -> None:
     await ensure_indexes(db)
 
@@ -76,21 +92,12 @@ async def seed(db: AsyncIOMotorDatabase) -> None:
     else:
         logger.info("Blockchain already has %d block(s), skipping genesis creation", len(existing_chain))
 
-    admin_seed_password = get_settings().admin_seed_password
+    settings = get_settings()
     user_repository = MongoUserRepository(db)
-    if await user_repository.get_by_username(_ADMIN_USERNAME) is not None:
-        logger.info("Admin user already exists, skipping")
-    elif not admin_seed_password:
-        logger.warning("ADMIN_SEED_PASSWORD not set -- skipping admin user creation")
-    else:
-        await user_repository.create(
-            User(
-                username=_ADMIN_USERNAME,
-                password_hash=hash_password(admin_seed_password),
-                role=Role.ADMIN,
-            )
-        )
-        logger.info("Created default admin user %r", _ADMIN_USERNAME)
+    await _seed_user(user_repository, _ADMIN_USERNAME, settings.admin_seed_password, Role.ADMIN)
+    await _seed_user(
+        user_repository, _DEVICE_USERNAME, settings.device_seed_password, Role.OPERATOR
+    )
 
 
 async def _main() -> None:
