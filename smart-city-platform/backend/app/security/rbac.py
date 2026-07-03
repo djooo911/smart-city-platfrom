@@ -13,19 +13,28 @@ carries `password_hash`, which has no meaningful value here (we never
 re-fetch the stored hash for an already-authenticated request), and
 routes only ever need `username`/`role` for RBAC checks and "acted_by"
 audit fields.
+
+Uses `HTTPBearer`, not `OAuth2PasswordBearer`: `/auth/login` takes a JSON
+body (see schemas/auth.py's LoginRequest), not an OAuth2 password-grant
+form -- OAuth2PasswordBearer tells Swagger UI's "Authorize" button to
+submit a form-encoded username/password to the token URL, which doesn't
+match our actual login contract and fails with a 422. HTTPBearer instead
+gives Swagger a plain "paste your token" field: call POST /auth/login
+manually via "Try it out", copy the returned access_token, then
+Authorize with that.
 """
 
 from dataclasses import dataclass
 
 import jwt
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.config import get_settings
 from app.domain.entities.enums import Role
 from app.security.jwt import decode_access_token
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{get_settings().api_v1_prefix}/auth/login")
+http_bearer = HTTPBearer()
 
 _ROLE_RANK = {Role.VIEWER: 0, Role.OPERATOR: 1, Role.ADMIN: 2}
 
@@ -36,14 +45,16 @@ class CurrentUser:
     role: Role
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
+) -> CurrentUser:
     credentials_error = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = decode_access_token(token, get_settings().secret_key)
+        payload = decode_access_token(credentials.credentials, get_settings().secret_key)
         username = payload["sub"]
         role = Role(payload["role"])
     except (jwt.InvalidTokenError, KeyError, ValueError):
