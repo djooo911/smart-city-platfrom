@@ -24,12 +24,15 @@
  * pbkdf2 over passlib+bcrypt, and PyJWT over python-jose: proportional
  * complexity, not maximal security engineering).
  *
- * PWM: written against the ESP32 Arduino core 2.x LEDC API
- * (ledcSetup/ledcAttachPin/ledcWrite(channel, duty)) since that's what
- * PlatformIO's unpinned "platform = espressif32" resolves to today (see
- * platformio.ini's comment). If that resolves to core 3.x in the future,
- * these calls would need updating to ledcAttach(pin, ...)/ledcWrite(pin,
- * ...).
+ * PWM: the ESP32 Arduino core's LEDC API changed between core 2.x
+ * (ledcSetup/ledcAttachPin/ledcWrite(channel, duty)) and core 3.x
+ * (ledcAttach(pin, ...)/ledcWrite(pin, duty)) -- and different toolchains
+ * resolve to different core versions (PlatformIO's official registry
+ * still resolves "platform = espressif32" to core 2.0.17 as of writing,
+ * while wokwi.com's own cloud compiler resolves to core 3.x). Rather than
+ * pick one and break the other, setupPwm()/applyBrightness() below branch
+ * on the ESP_ARDUINO_VERSION_MAJOR macro so this file compiles under
+ * either toolchain unmodified.
  *
  * Timestamps: NTP-synced (UTC), formatted with no "Z"/offset suffix to
  * match this project's naive-UTC convention used throughout the backend.
@@ -138,7 +141,20 @@ void applyBrightness(float brightnessPct) {
   brightnessPct = constrain(brightnessPct, 0.0f, 100.0f);
   currentBrightnessPct = brightnessPct;
   int duty = (int)round(brightnessPct / 100.0f * 255.0f);
+#if ESP_ARDUINO_VERSION_MAJOR >= 3
+  ledcWrite(LED_PIN, duty);
+#else
   ledcWrite(LEDC_CHANNEL, duty);
+#endif
+}
+
+void setupPwm() {
+#if ESP_ARDUINO_VERSION_MAJOR >= 3
+  ledcAttach(LED_PIN, LEDC_FREQ_HZ, LEDC_RESOLUTION_BITS);
+#else
+  ledcSetup(LEDC_CHANNEL, LEDC_FREQ_HZ, LEDC_RESOLUTION_BITS);
+  ledcAttachPin(LED_PIN, LEDC_CHANNEL);
+#endif
 }
 
 // --- Backend calls -----------------------------------------------------
@@ -249,8 +265,7 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  ledcSetup(LEDC_CHANNEL, LEDC_FREQ_HZ, LEDC_RESOLUTION_BITS);
-  ledcAttachPin(LED_PIN, LEDC_CHANNEL);
+  setupPwm();
   applyBrightness(currentBrightnessPct);
 
   connectWiFi();
