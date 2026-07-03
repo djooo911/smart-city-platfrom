@@ -16,3 +16,4 @@ async def ensure_indexes(db: AsyncIOMotorDatabase) -> None:
 
     await db["blockchain"].create_index("index", unique=True)
     await db["blockchain"].create_index("hash")
+    await db["blockchain"].create_index("data.device_id")

@@ -33,6 +33,15 @@ class Settings(BaseSettings):
     # --- CORS (dashboard runs locally, on a different port) ---
     cors_allow_origins: str = "*"  # comma-separated list in real deployments
 
+    # --- Auth (Milestone 4) ---
+    # No default for secret_key: JWT signing must not silently fall back to a
+    # guessable value. Settings() raises at startup if it's unset.
+    secret_key: str
+    access_token_expire_minutes: int = 60
+    # Used only by infrastructure/mongo/seed.py to create the initial admin
+    # user -- not read anywhere else in the app.
+    admin_seed_password: str | None = None
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

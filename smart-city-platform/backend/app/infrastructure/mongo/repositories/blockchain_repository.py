@@ -57,3 +57,11 @@ class MongoBlockchainRepository:
     async def load_chain(self) -> list[Block]:
         cursor = self._collection.find({}).sort("index", 1)
         return [_to_entity(doc) async for doc in cursor]
+
+    async def get_block_by_index(self, index: int) -> Block | None:
+        doc = await self._collection.find_one({"index": index})
+        return _to_entity(doc) if doc else None
+
+    async def list_by_device(self, device_id: str) -> list[Block]:
+        cursor = self._collection.find({"data.device_id": device_id}).sort("index", 1)
+        return [_to_entity(doc) async for doc in cursor]

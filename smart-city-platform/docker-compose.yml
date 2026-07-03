@@ -39,6 +39,10 @@ services:
       MONGO_DB_NAME: ${MONGO_DB_NAME:-smart_city_db}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-*}
+      # Dev-only fallback -- set a real SECRET_KEY in your .env for anything
+      # beyond local experimentation.
+      SECRET_KEY: ${SECRET_KEY:-dev-only-insecure-secret-key}
+      ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-}
     volumes:
       - ./backend:/app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

@@ -57,3 +57,14 @@ class MongoSensorReadingRepository:
             {"device_id": device_id}, sort=[("timestamp", -1)]
         )
         return _to_entity(doc) if doc else None
+
+    async def list_history(
+        self, device_id: str, page: int = 1, page_size: int = 20
+    ) -> list[SensorReading]:
+        cursor = (
+            self._collection.find({"device_id": device_id})
+            .sort("timestamp", -1)
+            .skip((page - 1) * page_size)
+            .limit(page_size)
+        )
+        return [_to_entity(doc) async for doc in cursor]

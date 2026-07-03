@@ -9,6 +9,10 @@ shape (`{"data": ..., "meta": ...}`) that every future endpoint will
 follow.
 """
 
+import pytest
+
+pytestmark = pytest.mark.regression
+
 
 def test_health_check_returns_ok_status(client):
     response = client.get("/api/v1/system/health")

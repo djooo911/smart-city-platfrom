@@ -17,7 +17,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from app.config import get_settings
 from app.infrastructure.mongo.indexes import ensure_indexes
 
-_COLLECTIONS_TO_RESET = ["lamp_nodes", "sensor_readings", "anomalies", "blockchain"]
+_COLLECTIONS_TO_RESET = ["lamp_nodes", "sensor_readings", "anomalies", "blockchain", "users"]
 
 
 @pytest.fixture
