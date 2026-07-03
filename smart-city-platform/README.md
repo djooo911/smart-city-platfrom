@@ -111,7 +111,7 @@ See `docs/architecture.md` §9 for the full milestone plan. Current status:
 - [x] **M1** — Domain & application core (energy optimization, anomaly rules)
 - [x] **M2** — Blockchain engine
 - [x] **M3** — MongoDB repositories & collections
-- [ ] **M4** — REST API layer (lamps, traffic, alerts, blockchain explorer)
+- [x] **M4** — REST API layer (lamps, alerts, blockchain explorer, auth/RBAC — traffic + energy-savings endpoints deferred, no data pipeline yet)
 - [ ] **M5** — IoT simulation (Wokwi) + HTTP telemetry ingestion
 - [ ] **M6** — Fallback Python telemetry simulator
 - [ ] **M7** — Web dashboard (Leaflet map, charts, blockchain explorer UI)
