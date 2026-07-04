@@ -9,6 +9,7 @@ import pytest
 from app.domain.entities.enums import LampStatus
 from app.domain.entities.lamp_config import LampConfig
 from app.domain.entities.lamp_node import LampNode
+from app.domain.entities.location import Location
 from app.infrastructure.mongo.repositories.lamp_repository import MongoLampRepository
 
 pytestmark = pytest.mark.integration
@@ -51,6 +52,26 @@ async def test_config_nested_mapping_survives_round_trip(db):
     result = await repository.get(lamp.device_id)
 
     assert result.config == lamp.config
+
+
+async def test_location_round_trip(db):
+    repository = MongoLampRepository(db)
+    lamp = _lamp(location=Location(lat=36.8065, lng=10.1815, label="Avenue Habib Bourguiba"))
+
+    await repository.upsert(lamp)
+    result = await repository.get(lamp.device_id)
+
+    assert result.location == lamp.location
+
+
+async def test_location_is_none_when_not_set(db):
+    repository = MongoLampRepository(db)
+    lamp = _lamp()  # no location override -- defaults to None
+
+    await repository.upsert(lamp)
+    result = await repository.get(lamp.device_id)
+
+    assert result.location is None
 
 
 async def test_get_returns_none_for_unknown_device_id(db):

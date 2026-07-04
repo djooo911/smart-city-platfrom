@@ -15,6 +15,7 @@ from datetime import datetime
 
 from app.domain.entities.enums import LampStatus
 from app.domain.entities.lamp_config import LampConfig
+from app.domain.entities.location import Location
 
 
 @dataclass
@@ -24,3 +25,4 @@ class LampNode:
     current_brightness_pct: float
     last_seen: datetime
     config: LampConfig
+    location: Location | None = None

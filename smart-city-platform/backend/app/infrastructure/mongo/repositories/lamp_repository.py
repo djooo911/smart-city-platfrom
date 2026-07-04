@@ -1,8 +1,8 @@
 """
 MongoLampRepository — Mongo-backed implementation of LampRepository.
 
-Two mapping asymmetries vs. the domain entity, both deliberate and
-confined to this file:
+Mapping asymmetries vs. the domain entity, both deliberate and confined
+to this file:
 
 1. `_id` is the device_id string (per docs/architecture.md §6.2), not an
    ObjectId. `upsert` builds the replacement document WITHOUT an `_id`
@@ -12,10 +12,13 @@ confined to this file:
 2. `LampConfig`'s 4 flat domain fields map to a nested document shape
    (`min_brightness`/`max_brightness` at the top of `config`, the other
    two nested under `anomaly_thresholds`) matching architecture.md's
-   documented schema. `location` and `firmware_version` exist in that
-   schema but have no home in the domain entities yet -- they're simply
-   omitted from the write payload (no null placeholders) until a later
-   milestone populates them meaningfully.
+   documented schema. `firmware_version` exists in that schema but still
+   has no home in the domain entity -- omitted from the write payload
+   (no null placeholder) until a milestone needs it. `location` *does*
+   now have a home (Milestone 7, for the dashboard's map) -- omitted from
+   the write payload only when the entity's `location` is `None` (e.g.
+   lamps auto-created by telemetry ingestion, which have no known
+   physical position).
 
 Enums are serialized via explicit `.value` / reconstructed via the enum
 constructor rather than relying on implicit BSON string coercion.
@@ -26,6 +29,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 from app.domain.entities.enums import LampStatus
 from app.domain.entities.lamp_config import LampConfig
 from app.domain.entities.lamp_node import LampNode
+from app.domain.entities.location import Location
 
 _COLLECTION_NAME = "lamp_nodes"
 
@@ -51,22 +55,35 @@ def _config_from_document(doc: dict) -> LampConfig:
     )
 
 
+def _location_to_document(location: Location) -> dict:
+    return {"lat": location.lat, "lng": location.lng, "label": location.label}
+
+
+def _location_from_document(doc: dict) -> Location:
+    return Location(lat=doc["lat"], lng=doc["lng"], label=doc["label"])
+
+
 def _to_document(lamp: LampNode) -> dict:
-    return {
+    document = {
         "status": lamp.status.value,
         "current_brightness_pct": lamp.current_brightness_pct,
         "last_seen": lamp.last_seen,
         "config": _config_to_document(lamp.config),
     }
+    if lamp.location is not None:
+        document["location"] = _location_to_document(lamp.location)
+    return document
 
 
 def _to_entity(doc: dict) -> LampNode:
+    location_doc = doc.get("location")
     return LampNode(
         device_id=doc["_id"],
         status=LampStatus(doc["status"]),
         current_brightness_pct=doc["current_brightness_pct"],
         last_seen=doc["last_seen"],
         config=_config_from_document(doc["config"]),
+        location=_location_from_document(location_doc) if location_doc else None,
     )
 
 

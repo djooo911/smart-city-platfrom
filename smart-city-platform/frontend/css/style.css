@@ -1,27 +1,300 @@
 /*
-  Milestone 0 placeholder styling only.
-  Real dashboard styling arrives in Milestone 7.
+  Milestone 7 dashboard styling. Extends the Milestone 0 dark palette
+  (#0f172a background, #e2e8f0 text) rather than replacing it.
 */
+
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --ok: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background-color: #0f172a;
-  color: #e2e8f0;
+  background-color: var(--bg);
+  color: var(--text);
   margin: 0;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent);
+  color: #0f172a;
+  font-weight: 600;
+}
+
+button.secondary-button {
+  background-color: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+}
+
+input,
+select {
+  font-family: inherit;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.view[hidden] {
+  display: none;
+}
+
+/* --- Login --- */
+
+#login-view {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
-.scaffold-notice {
-  text-align: center;
-  max-width: 480px;
+.login-card {
+  width: 320px;
   padding: 2rem;
-  border: 1px solid #334155;
+  border: 1px solid var(--border);
   border-radius: 8px;
+  background-color: var(--surface);
 }
 
-#api-status {
-  font-weight: bold;
+.login-card h1 {
+  font-size: 1.25rem;
+  margin-top: 0;
+}
+
+.error-text {
+  color: var(--danger);
+  font-size: 0.85rem;
+}
+
+/* --- Dashboard shell --- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar h1 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#current-user {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-button {
+  background: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-radius: 6px 6px 0 0;
+  padding: 0.5rem 1rem;
+}
+
+.tab-button.active {
+  color: var(--text);
+  background-color: var(--surface);
+}
+
+main {
+  padding: 1.5rem;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* --- Map --- */
+
+/* Leaflet renders blank without an explicit container height. */
+#map {
+  height: 70vh;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* --- Tables --- */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.data-table tbody tr {
+  cursor: pointer;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(56, 189, 248, 0.08);
+}
+
+.status-online {
+  color: var(--ok);
+}
+
+.status-offline {
+  color: var(--danger);
+}
+
+/* --- Lamps tab --- */
+
+.lamps-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.detail-panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.inline-form {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.inline-form h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+/* --- Alerts tab --- */
+
+.alerts-filters {
+  margin-bottom: 1rem;
+}
+
+.alerts-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alert-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--warning);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alert-card.severity-high {
+  border-left-color: var(--danger);
+}
+
+.alert-card.severity-low {
+  border-left-color: var(--text-muted);
+}
+
+.alert-card.resolved {
+  opacity: 0.6;
+}
+
+.alert-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* --- Blockchain tab --- */
+
+.blockchain-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.block-detail {
+  margin-top: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .lamps-layout {
+    grid-template-columns: 1fr;
+  }
 }

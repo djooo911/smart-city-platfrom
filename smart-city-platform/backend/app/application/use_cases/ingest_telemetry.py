@@ -84,6 +84,7 @@ class IngestTelemetryUseCase:
                 current_brightness_pct=target_brightness,
                 last_seen=reading.timestamp,
                 config=config,
+                location=existing_lamp.location if existing_lamp else None,
             )
         )
 

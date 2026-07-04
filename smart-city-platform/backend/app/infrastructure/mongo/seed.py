@@ -20,6 +20,7 @@ from app.config import get_settings
 from app.domain.entities.enums import LampStatus, Role
 from app.domain.entities.lamp_config import LampConfig
 from app.domain.entities.lamp_node import LampNode
+from app.domain.entities.location import Location
 from app.domain.entities.user import User
 from app.infrastructure.blockchain.chain import create_genesis_chain
 from app.infrastructure.mongo.client import close_mongo_connection, connect_to_mongo, get_database
@@ -43,6 +44,7 @@ _SAMPLE_LAMPS = [
         current_brightness_pct=50.0,
         last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
         config=LampConfig(),
+        location=Location(lat=36.8065, lng=10.1815, label="Avenue Habib Bourguiba"),
     ),
     LampNode(
         device_id="lamp-002",
@@ -50,6 +52,7 @@ _SAMPLE_LAMPS = [
         current_brightness_pct=75.0,
         last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
         config=LampConfig(),
+        location=Location(lat=36.8189, lng=10.1658, label="Rue de Marseille"),
     ),
     LampNode(
         device_id="lamp-003",
@@ -57,6 +60,7 @@ _SAMPLE_LAMPS = [
         current_brightness_pct=0.0,
         last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
         config=LampConfig(),
+        location=Location(lat=36.7990, lng=10.1950, label="Avenue Mohamed V"),
     ),
 ]
 

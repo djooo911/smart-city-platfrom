@@ -1,28 +1,135 @@
 <!DOCTYPE html>
 <!--
-  Milestone 0 placeholder.
+  Milestone 7 dashboard.
 
-  This is intentionally NOT the dashboard (that's Milestone 7). Its only
-  purpose is to prove the frontend container serves static files correctly
-  and can reach the backend API, before any real UI work begins.
-
-  Leaflet.js (city map library, per project decisions) will be added as a
-  dependency starting in Milestone 7, not here.
+  Vanilla JS, native ES modules (no bundler/build step -- this project has
+  never had one; the frontend is a straight nginx static-file copy). Every
+  API endpoint requires at least "viewer" role (see backend/app/security/
+  rbac.py), so the login view is always the first thing shown; there is no
+  anonymous read-only mode.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart City Platform — Scaffold</title>
+  <title>Smart City Platform — Dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <main class="scaffold-notice">
-    <h1>Smart City Public Lighting &amp; Traffic Monitoring</h1>
-    <p>Frontend container is running. Dashboard UI is not implemented yet (Milestone 7).</p>
-    <p>Backend API status: <span id="api-status">checking...</span></p>
-  </main>
+  <section id="login-view" class="view">
+    <form id="login-form" class="login-card">
+      <h1>Smart City Platform</h1>
+      <label>Nom d'utilisateur
+        <input type="text" id="login-username" required autocomplete="username" />
+      </label>
+      <label>Mot de passe
+        <input type="password" id="login-password" required autocomplete="current-password" />
+      </label>
+      <button type="submit">Se connecter</button>
+      <p id="login-error" class="error-text" hidden></p>
+    </form>
+  </section>
 
-  <script src="js/main.js"></script>
+  <div id="dashboard-view" class="view" hidden>
+    <header class="topbar">
+      <h1>Smart City Platform</h1>
+      <div class="topbar-right">
+        <span id="current-user"></span>
+        <button id="logout-button" class="secondary-button">Se déconnecter</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-button active" data-tab="map">Carte</button>
+      <button class="tab-button" data-tab="lamps">Lampadaires</button>
+      <button class="tab-button" data-tab="alerts">Alertes</button>
+      <button class="tab-button" data-tab="blockchain">Blockchain</button>
+    </nav>
+
+    <main>
+      <section id="tab-map" class="tab-panel active">
+        <div id="map"></div>
+      </section>
+
+      <section id="tab-lamps" class="tab-panel">
+        <div class="lamps-layout">
+          <table id="lamps-table" class="data-table">
+            <thead>
+              <tr><th>ID</th><th>Statut</th><th>Luminosité</th><th>Dernière vue</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div id="lamp-detail" class="detail-panel" hidden>
+            <h2 id="lamp-detail-title"></h2>
+            <canvas id="lamp-history-chart" height="200"></canvas>
+
+            <form id="override-form" class="inline-form" hidden>
+              <h3>Override manuel</h3>
+              <label>Luminosité %
+                <input type="number" id="override-brightness" min="0" max="100" step="0.1" required />
+              </label>
+              <label>Raison
+                <input type="text" id="override-reason" required />
+              </label>
+              <button type="submit">Appliquer</button>
+            </form>
+
+            <form id="config-form" class="inline-form" hidden>
+              <h3>Configuration (admin)</h3>
+              <label>Luminosité min %
+                <input type="number" id="config-min" min="0" max="100" step="0.1" required />
+              </label>
+              <label>Luminosité max %
+                <input type="number" id="config-max" min="0" max="100" step="0.1" required />
+              </label>
+              <label>Timeout hors-ligne (s)
+                <input type="number" id="config-timeout" min="1" required />
+              </label>
+              <label>Tolérance actionneur %
+                <input type="number" id="config-tolerance" min="0" max="100" step="0.1" required />
+              </label>
+              <button type="submit">Enregistrer</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-alerts" class="tab-panel">
+        <div class="alerts-filters">
+          <label>Statut
+            <select id="alerts-filter-resolved">
+              <option value="">Tous</option>
+              <option value="false">Non résolus</option>
+              <option value="true">Résolus</option>
+            </select>
+          </label>
+        </div>
+        <ul id="alerts-list" class="alerts-list"></ul>
+      </section>
+
+      <section id="tab-blockchain" class="tab-panel">
+        <div class="blockchain-toolbar">
+          <button id="verify-chain-button" class="secondary-button">Vérifier la chaîne</button>
+          <span id="verify-chain-result"></span>
+        </div>
+        <table id="blocks-table" class="data-table">
+          <thead><tr><th>#</th><th>Horodatage</th><th>Événement</th><th>Hash</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="pagination">
+          <button id="blocks-prev-page" class="secondary-button">&laquo; Précédent</button>
+          <span id="blocks-page-label"></span>
+          <button id="blocks-next-page" class="secondary-button">Suivant &raquo;</button>
+        </div>
+        <pre id="block-detail" class="block-detail" hidden></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>

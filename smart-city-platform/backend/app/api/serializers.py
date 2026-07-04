@@ -24,6 +24,11 @@ def serialize_lamp(lamp: LampNode) -> dict:
             "offline_timeout_seconds": lamp.config.offline_timeout_seconds,
             "actuator_mismatch_tolerance_pct": lamp.config.actuator_mismatch_tolerance_pct,
         },
+        "location": (
+            {"lat": lamp.location.lat, "lng": lamp.location.lng, "label": lamp.location.label}
+            if lamp.location
+            else None
+        ),
     }
 
 
