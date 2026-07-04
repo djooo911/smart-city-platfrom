@@ -190,7 +190,8 @@ bool login() {
       Serial.println("Login response JSON parse failed.");
     }
   } else {
-    Serial.printf("Login failed, HTTP status=%d\n", statusCode);
+    Serial.printf("Login failed, HTTP status=%d (%s)\n", statusCode,
+                   HTTPClient::errorToString(statusCode).c_str());
   }
 
   http.end();
@@ -248,7 +249,8 @@ void sendTelemetry() {
     Serial.println("Telemetry auth failed (401) -- forcing re-login next cycle.");
     accessToken = "";
   } else {
-    Serial.printf("Telemetry POST failed, HTTP status=%d\n", statusCode);
+    Serial.printf("Telemetry POST failed, HTTP status=%d (%s)\n", statusCode,
+                   HTTPClient::errorToString(statusCode).c_str());
   }
 
   http.end();
