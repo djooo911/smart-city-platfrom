@@ -3,7 +3,7 @@
   "author": "Smart City Project Team",
   "editor": "wokwi",
   "parts": [
-    { "type": "wokwi-esp32-devkit-v1", "id": "esp32", "top": 0, "left": 0, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp32", "top": 0, "left": 0, "attrs": {} },
     { "type": "wokwi-potentiometer", "id": "pot1", "top": -40, "left": 300, "attrs": {} },
     { "type": "wokwi-pir-motion-sensor", "id": "pir1", "top": 60, "left": 300, "attrs": {} },
     { "type": "wokwi-hc-sr04", "id": "hcsr1", "top": 160, "left": 300, "attrs": {} },
@@ -11,6 +11,9 @@
     { "type": "wokwi-resistor", "id": "r1", "top": 260, "left": 250, "attrs": { "value": "220" } }
   ],
   "connections": [
+    ["esp32:TX", "$serialMonitor:RX", "", []],
+    ["esp32:RX", "$serialMonitor:TX", "", []],
+
     ["pot1:SIG", "esp32:D34", "green", []],
     ["pot1:VCC", "esp32:3V3", "red", []],
     ["pot1:GND", "esp32:GND.1", "black", []],
