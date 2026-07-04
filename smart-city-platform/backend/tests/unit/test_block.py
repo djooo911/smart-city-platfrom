@@ -63,3 +63,22 @@ def test_data_key_order_does_not_affect_the_hash():
     hash_b = _hash(data={"b": 2, "a": 1})
 
     assert hash_a == hash_b
+
+
+def test_hash_is_stable_across_microsecond_truncation_to_the_same_millisecond():
+    # Regression test: MongoDB's BSON date type only stores millisecond
+    # precision. A timestamp with microseconds must hash the same as its
+    # millisecond-truncated form, or a block mined from datetime.now()
+    # would fail verify_chain() after a save/load round-trip through Mongo
+    # for no real reason.
+    hash_full_precision = _hash(timestamp=datetime(2026, 7, 2, 14, 0, 0, 123_456))
+    hash_pre_truncated = _hash(timestamp=datetime(2026, 7, 2, 14, 0, 0, 123_000))
+
+    assert hash_full_precision == hash_pre_truncated
+
+
+def test_microseconds_crossing_a_millisecond_boundary_still_changes_the_hash():
+    hash_a = _hash(timestamp=datetime(2026, 7, 2, 14, 0, 0, 123_000))
+    hash_b = _hash(timestamp=datetime(2026, 7, 2, 14, 0, 0, 124_000))
+
+    assert hash_a != hash_b

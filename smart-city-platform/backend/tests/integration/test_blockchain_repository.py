@@ -80,3 +80,26 @@ async def test_load_chain_returns_empty_list_when_no_blocks(db):
     repository = MongoBlockchainRepository(db)
 
     assert await repository.load_chain() == []
+
+
+async def test_verify_chain_survives_round_trip_with_microsecond_precision_timestamp(db):
+    # Regression test: this is exactly the bug that slipped past every
+    # other test in this file, since NOW/LATER/EVEN_LATER above all use
+    # zero-microsecond fixtures. MongoDB truncates datetimes to
+    # millisecond precision; a genesis block mined from a realistic
+    # datetime.now()-style timestamp (microsecond precision) must still
+    # pass verification after a save/load round-trip.
+    repository = MongoBlockchainRepository(db)
+    consensus = _consensus()
+    now_with_microseconds = datetime(2026, 7, 3, 10, 0, 0, 123_456)
+    chain = create_genesis_chain(now_with_microseconds, consensus=consensus)
+
+    await repository.append_block(chain.latest_block)
+
+    loaded_blocks = await repository.load_chain()
+    reconstructed_chain = Blockchain(blocks=loaded_blocks, consensus=consensus)
+
+    result = reconstructed_chain.verify_chain()
+
+    assert result.valid is True
+    assert result.broken_at_index is None
