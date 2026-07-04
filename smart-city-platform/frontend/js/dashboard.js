@@ -49,11 +49,13 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
 
   try {
     await auth.login(username, password);
-    showDashboard();
   } catch {
     errorEl.textContent = "Identifiants invalides";
     errorEl.hidden = false;
+    return;
   }
+
+  showDashboard();
 });
 
 document.getElementById("logout-button").addEventListener("click", () => {

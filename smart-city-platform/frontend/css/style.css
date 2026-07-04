@@ -64,8 +64,11 @@ label {
   margin-bottom: 0.75rem;
 }
 
+/* !important is deliberate here: #login-view's own `display: flex` (an ID
+   selector) would otherwise out-specificity this class+attribute rule and
+   keep rendering on top of the dashboard even when [hidden] is set. */
 .view[hidden] {
-  display: none;
+  display: none !important;
 }
 
 /* --- Login --- */
