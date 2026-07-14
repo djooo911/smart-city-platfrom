@@ -1,7 +1,12 @@
 # Smart City Public Lighting and Traffic Monitoring with Blockchain Traceability
-## Architecture & Design Document (Pre-Implementation)
+## Architecture & Design Document
 
-**Status:** Design phase — no code written yet, per project instructions.
+**Status:** All 9 milestones (§9) implemented; this document is kept as
+the original design record, not a live spec. Where the implementation
+ended up diverging from a decision made here, that's called out inline
+(search for "**Deviation:**") rather than silently rewriting history —
+see in particular G1 (§1.1) and M5 (§9), where the initial MQTT choice
+was replaced with HTTP REST end-to-end.
 **Audience:** University engineering project (production-quality patterns, academic-appropriate scope).
 
 ---
@@ -14,7 +19,7 @@ Before designing anything, here are the ambiguities in the original brief and th
 
 | # | Gap | Proposed Resolution |
 |---|-----|---------------------|
-| G1 | How does ESP32 talk to the backend? (MQTT vs HTTP vs WebSocket) | **MQTT** for telemetry (pub/sub, lightweight, standard for IoT), **HTTP REST** for dashboard/API/config. This is the industry-realistic pattern and demonstrates two communication paradigms — good for grading rubrics that reward architectural depth. |
+| G1 | How does ESP32 talk to the backend? (MQTT vs HTTP vs WebSocket) | **MQTT** for telemetry (pub/sub, lightweight, standard for IoT), **HTTP REST** for dashboard/API/config. This is the industry-realistic pattern and demonstrates two communication paradigms — good for grading rubrics that reward architectural depth. **Deviation (M5):** implemented as **HTTP REST end-to-end** instead — no MQTT broker in `docker-compose.yml`, no subscriber service. The ESP32 firmware POSTs telemetry directly to `/lamps/{id}/telemetry` using `WiFiClientSecure`. Simpler dependency graph for a single/few-node academic deployment, and one less moving part to keep alive on Render's free tier; the two-paradigm demonstration goal was judged not worth the added infrastructure for this scope. |
 | G2 | What triggers a "Blockchain-worthy" event vs a routine telemetry write? | Define explicit **event classes**: (a) anomaly detected, (b) lamp failure, (c) manual/automatic configuration change, (d) system threshold breach. Routine sensor readings go to MongoDB only — the chain isn't a time-series database. |
 | G3 | Single lamp/pole or a network of poles? | Design for **N independent "lamp nodes"**, each with a unique `device_id`, so the system demonstrates multi-node scalability even if only 1–3 physical/simulated nodes exist in Wokwi. |
 | G4 | What counts as an "anomaly"? | Define concrete rules: sensor value out of physical range, no telemetry received within timeout (offline lamp), LED not responding to brightness command (actuator mismatch), abnormal traffic spike vs baseline. |
@@ -457,9 +462,8 @@ smart-city-platform/
 │   │   │   ├── mongo/
 │   │   │   │   ├── client.py
 │   │   │   │   └── repositories/
-│   │   │   ├── mqtt/
-│   │   │   │   ├── subscriber.py
-│   │   │   │   └── publisher.py
+│   │   │   │                     (no mqtt/ -- see G1 deviation, §1.1:
+│   │   │   │                      shipped as HTTP REST end-to-end instead)
 │   │   │   └── blockchain/
 │   │   │       ├── block.py
 │   │   │       ├── chain.py
@@ -515,7 +519,7 @@ smart-city-platform/
 | **M2 — Blockchain Engine** | Block/chain classes, PoW stub, integrity verification, Mongo persistence for chain | `/blockchain/verify` works against seeded data |
 | **M3 — MongoDB Integration** | Repositories, collections, indexes, seed scripts | CRUD through repository layer, verified with integration tests |
 | **M4 — REST API Layer** | All routers from §5, auth/RBAC, OpenAPI docs | Postman/OpenAPI collection fully exercising the API |
-| **M5 — IoT Simulation (Wokwi) + MQTT** | ESP32 firmware, MQTT broker in Compose, subscriber service wired to use cases | Live telemetry from Wokwi reaches MongoDB & triggers lighting changes |
+| **M5 — IoT Simulation (Wokwi) + MQTT** | ESP32 firmware, MQTT broker in Compose, subscriber service wired to use cases. **Deviation:** shipped as HTTP REST end-to-end instead of MQTT — see G1 (§1.1). | Live telemetry from Wokwi reaches MongoDB & triggers lighting changes |
 | **M6 — Fallback Simulator** | Python script replaying/generating telemetry without Wokwi | Demo works even if Wokwi is unavailable |
 | **M7 — Dashboard** | Live monitoring views, charts, blockchain explorer UI, alerts panel | Fully interactive dashboard against real backend |
 | **M8 — Regression Testing & CI** | Full pytest regression suite, GitHub Actions pipeline | CI green on every PR |

@@ -1,15 +1,18 @@
 # Smart City Public Lighting and Traffic Monitoring with Blockchain Traceability
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
+[![CI](https://github.com/djooo911/smart-city-platfrom/actions/workflows/ci.yml/badge.svg)](https://github.com/djooo911/smart-city-platfrom/actions/workflows/ci.yml)
 
 University engineering project. A Smart City platform that simulates
 intelligent street lighting and traffic monitoring, records anomalies and
 infrastructure decisions on a local (non-cryptocurrency) blockchain for
 auditability, and exposes both a REST API and a web dashboard.
 
-> **Status:** Milestone 0 — project scaffold only. No business logic,
-> blockchain, sensor processing, or dashboard UI has been implemented yet.
-> See `docs/architecture.md` for the full design.
+> **Status:** All 9 milestones complete (see below). Live backend deployed
+> on Render, ESP32 firmware simulated in Wokwi, web dashboard and fallback
+> Python simulator both included. See `docs/architecture.md` for the full
+> design and [`docs/demo-script.md`](docs/demo-script.md) for a guided
+> walkthrough.
 
 ## Architecture at a Glance
 
@@ -31,11 +34,18 @@ structure: see [`docs/architecture.md`](docs/architecture.md).
 
 ```
 smart-city-platform/
-├── backend/          FastAPI application (Clean Architecture layers)
-├── frontend/          Static HTML/CSS/JS dashboard (placeholder for now)
-├── iot-firmware/      ESP32 firmware for Wokwi simulation (placeholder for now)
-├── docs/              Architecture documentation and diagrams
+├── backend/           FastAPI application (Clean Architecture layers),
+│                      pytest suite, and the M6 fallback telemetry simulator
+│                      (backend/simulator/replay.py)
+├── frontend/          Static HTML/CSS/JS dashboard (Leaflet map, charts,
+│                      blockchain explorer — no build step, native ES modules)
+├── iot-firmware/      ESP32 firmware (Wokwi simulation): LDR, PIR, HC-SR04,
+│                      PWM LED, HTTP REST telemetry client
+├── docs/              Architecture documentation and the demo script
 └── docker-compose.yml Local orchestration: backend + mongo + frontend
+
+../.github/workflows/ci.yml   M8 CI pipeline (one level above this
+                               directory, at the actual git repo root)
 ```
 
 ## Prerequisites
@@ -103,6 +113,46 @@ Note: the health check test requires a reachable MongoDB instance (e.g.
 `docker-compose up mongo -d` first), since it exercises the real startup
 lifecycle rather than mocking the database.
 
+Tests are split into three pytest markers (see `backend/pytest.ini`):
+`unit` (no infra), `integration` (real MongoDB, repository layer only),
+`regression` (full API via `TestClient`). Run one kind with
+`pytest -m unit`, `pytest -m integration`, or `pytest -m regression`.
+Both `integration` and `regression` refuse to run against a database
+named `smart_city_db` (Render's production name) as a safety guard — copy
+`backend/.env.example` to `backend/.env` and use a different
+`MONGO_DB_NAME`.
+
+## Running the Fallback Telemetry Simulator (M6)
+
+If Wokwi isn't open/reachable, `backend/simulator/replay.py` generates
+plausible sensor readings and posts them to a running backend, exactly
+like the ESP32 firmware would:
+
+```bash
+cd backend
+python simulator/replay.py --device-id lamp-001 --password <DEVICE_SEED_PASSWORD>
+python simulator/replay.py --once --password <DEVICE_SEED_PASSWORD>   # single reading, then exit
+```
+
+Defaults to the live Render backend and the `lamp-device` account; pass
+`--base-url` to point at a local backend instead. See the script's
+docstring for the full option list.
+
+## Running the Web Dashboard Locally (M7)
+
+The frontend is static HTML/CSS/JS with no build step — either run it via
+`docker-compose up` (serves on `http://localhost:8080`) or directly:
+
+```bash
+python -m http.server 8081 --directory frontend
+```
+
+Then open `http://localhost:8081`. By default `frontend/js/api.js` points
+at the live Render backend, so you can log in and see real data without
+running the backend locally — edit `API_BASE_URL` in that file to point
+at `http://localhost:8000/api/v1` instead if you're also running the
+backend locally.
+
 ## Project Milestones
 
 See `docs/architecture.md` §9 for the full milestone plan. Current status:
@@ -116,7 +166,7 @@ See `docs/architecture.md` §9 for the full milestone plan. Current status:
 - [x] **M6** — Fallback Python telemetry simulator
 - [x] **M7** — Web dashboard (Leaflet map, charts, blockchain explorer UI)
 - [x] **M8** — Regression testing & CI
-- [ ] **M9** — Hardening & documentation
+- [x] **M9** — Hardening & documentation (README/architecture doc finalized, demo script added)
 
 ## License / Academic Context
 
