@@ -499,9 +499,9 @@ smart-city-platform/
 │   │   └── blockchain-explorer.js
 │   └── assets/
 │
-└── ci/
-    └── github-actions/
-        └── regression-tests.yml
+└── (CI workflow lives at ../.github/workflows/ci.yml -- one level above
+    this project directory, since GitHub Actions only discovers workflows
+    under .github/workflows/ at the repository root)
 ```
 
 ---
