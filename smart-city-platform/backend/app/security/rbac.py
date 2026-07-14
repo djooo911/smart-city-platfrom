@@ -34,7 +34,7 @@ from app.config import get_settings
 from app.domain.entities.enums import Role
 from app.security.jwt import decode_access_token
 
-http_bearer = HTTPBearer()
+http_bearer = HTTPBearer(auto_error=False)
 
 _ROLE_RANK = {Role.VIEWER: 0, Role.OPERATOR: 1, Role.ADMIN: 2}
 
@@ -46,13 +46,19 @@ class CurrentUser:
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
+    credentials: HTTPAuthorizationCredentials | None = Depends(http_bearer),
 ) -> CurrentUser:
     credentials_error = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    if credentials is None:
+        # auto_error=False so a missing/malformed Authorization header lands
+        # here as None instead of HTTPBearer's default 403 -- a request with
+        # no credentials at all is a 401 (unauthenticated), not a 403
+        # (authenticated but forbidden).
+        raise credentials_error
     try:
         payload = decode_access_token(credentials.credentials, get_settings().secret_key)
         username = payload["sub"]
