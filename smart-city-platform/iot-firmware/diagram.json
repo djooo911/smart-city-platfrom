@@ -14,20 +14,20 @@
     ["esp32:TX", "$serialMonitor:RX", "", []],
     ["esp32:RX", "$serialMonitor:TX", "", []],
 
-    ["pot1:SIG", "esp32:D34", "green", []],
+    ["pot1:SIG", "esp32:34", "green", []],
     ["pot1:VCC", "esp32:3V3", "red", []],
     ["pot1:GND", "esp32:GND.1", "black", []],
 
-    ["pir1:OUT", "esp32:D27", "green", []],
+    ["pir1:OUT", "esp32:27", "green", []],
     ["pir1:VCC", "esp32:3V3", "red", []],
     ["pir1:GND", "esp32:GND.1", "black", []],
 
-    ["hcsr1:TRIG", "esp32:D26", "green", []],
-    ["hcsr1:ECHO", "esp32:D25", "yellow", []],
-    ["hcsr1:VCC", "esp32:VIN", "red", []],
+    ["hcsr1:TRIG", "esp32:26", "green", []],
+    ["hcsr1:ECHO", "esp32:25", "yellow", []],
+    ["hcsr1:VCC", "esp32:5V", "red", []],
     ["hcsr1:GND", "esp32:GND.1", "black", []],
 
-    ["esp32:D32", "r1:1", "orange", []],
+    ["esp32:32", "r1:1", "orange", []],
     ["r1:2", "led1:A", "orange", []],
     ["led1:C", "esp32:GND.1", "black", []]
   ],
