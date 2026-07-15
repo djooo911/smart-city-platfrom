@@ -215,6 +215,19 @@ main {
   padding: 1.25rem;
 }
 
+.last-detection {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.last-detection p {
+  margin: 0;
+}
+
 .inline-form {
   margin-top: 1rem;
   padding-top: 1rem;

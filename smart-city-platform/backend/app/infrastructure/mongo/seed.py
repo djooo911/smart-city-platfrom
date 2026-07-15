@@ -62,6 +62,30 @@ _SAMPLE_LAMPS = [
         config=LampConfig(),
         location=Location(lat=36.7990, lng=10.1950, label="Avenue Mohamed V"),
     ),
+    LampNode(
+        device_id="lamp-004",
+        status=LampStatus.ONLINE,
+        current_brightness_pct=60.0,
+        last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
+        config=LampConfig(),
+        location=Location(lat=36.8034, lng=10.1750, label="Avenue de Paris"),
+    ),
+    LampNode(
+        device_id="lamp-005",
+        status=LampStatus.ONLINE,
+        current_brightness_pct=45.0,
+        last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
+        config=LampConfig(),
+        location=Location(lat=36.8102, lng=10.1739, label="Avenue de la Liberté"),
+    ),
+    LampNode(
+        device_id="lamp-006",
+        status=LampStatus.OFFLINE,
+        current_brightness_pct=0.0,
+        last_seen=datetime.now(timezone.utc).replace(tzinfo=None),
+        config=LampConfig(),
+        location=Location(lat=36.8058, lng=10.1699, label="Rue de Palestine"),
+    ),
 ]
 
 

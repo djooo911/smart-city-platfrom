@@ -131,6 +131,26 @@ async function refreshLampsTable() {
   }
 }
 
+function renderLastDetection(latestReading) {
+  const container = document.getElementById("lamp-last-detection");
+  if (!latestReading) {
+    container.innerHTML = "<p>Aucun relevé reçu pour ce lampadaire.</p>";
+    return;
+  }
+
+  const vehicleText = latestReading.vehicle_detected
+    ? `<span class="status-offline">Véhicule détecté</span> (${latestReading.distance_cm?.toFixed(1) ?? "?"} cm)`
+    : `<span class="status-online">Aucun véhicule</span>`;
+  const pirText = latestReading.pir_triggered ? "Présence détectée" : "Pas de présence";
+
+  container.innerHTML = `
+    <p>
+      <strong>Dernier relevé</strong> (${new Date(latestReading.timestamp).toLocaleString()}) —
+      ${vehicleText} · ${pirText} · luminosité ambiante ${latestReading.ambient_light_pct.toFixed(1)}%
+    </p>
+  `;
+}
+
 async function showLampDetail(deviceId) {
   selectedLampId = deviceId;
   document.getElementById("lamp-detail").hidden = false;
@@ -141,6 +161,7 @@ async function showLampDetail(deviceId) {
     api.getLampHistory(deviceId, 1, 50),
   ]);
 
+  renderLastDetection(historyResponse.data[0]);
   renderHistoryChart(document.getElementById("lamp-history-chart"), historyResponse.data);
 
   document.getElementById("override-form").hidden = !auth.hasRole("operator");
