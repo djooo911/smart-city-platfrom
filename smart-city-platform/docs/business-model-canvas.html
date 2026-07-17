@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Business Model Canvas — Smart City Lighting Platform</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+<style>
+  :root {
+    --navy: #0f172a;
+    --surface: #1e293b;
+    --border: #334155;
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-dark: #0284c7;
+    --ok: #4ade80;
+    --warning: #fbbf24;
+  }
+  .reveal { font-family: 'Segoe UI', Calibri, sans-serif; }
+  .reveal .slides { text-align: left; }
+  .reveal h1, .reveal h2, .reveal h3 {
+    font-family: inherit;
+    text-transform: none;
+    color: var(--accent);
+    letter-spacing: 0;
+  }
+  .reveal section.title-slide h1 {
+    font-size: 2.4em;
+    color: #fff;
+    margin-bottom: 0.1em;
+  }
+  .reveal section.title-slide h2 {
+    font-size: 1.2em;
+    color: var(--accent);
+    font-weight: 400;
+    margin-bottom: 0.4em;
+  }
+  .kicker {
+    font-size: 0.5em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+  .rule {
+    width: 70px;
+    height: 4px;
+    background: var(--accent);
+    border: none;
+    margin: 0.4em 0 0.6em;
+  }
+  .reveal ul { margin-top: 0.3em; }
+  .reveal li { margin-bottom: 0.45em; line-height: 1.35; }
+  .reveal li::marker { color: var(--accent); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9em 1.1em;
+  }
+  .card-header {
+    font-size: 0.62em;
+    font-weight: 700;
+    color: #fff;
+    padding: 0.3em 0.6em;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0.5em;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+  }
+  .subtitle-tag {
+    font-size: 0.55em;
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+    margin-bottom: 0.4em;
+    display: block;
+  }
+  .bmc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 6px;
+    height: 460px;
+  }
+  .bmc-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.55em 0.65em;
+    overflow: hidden;
+  }
+  .bmc-cell h4 {
+    font-size: 0.58em;
+    color: var(--accent);
+    margin: 0 0 0.35em;
+    line-height: 1.15;
+  }
+  .bmc-cell p {
+    font-size: 0.48em;
+    color: var(--text-light);
+    line-height: 1.35;
+    margin: 0;
+  }
+  .bmc-span2 { grid-row: span 2; }
+  .bmc-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .bmc-bottom .bmc-cell p { font-size: 0.5em; }
+  .badge {
+    display: inline-block;
+    font-size: 0.5em;
+    font-weight: 700;
+    padding: 0.25em 0.7em;
+    border-radius: 999px;
+    margin-bottom: 0.5em;
+  }
+  .badge-problem { background: #451a03; color: var(--warning); }
+  .badge-solution { background: #052e16; color: var(--ok); }
+  .reveal .progress { color: var(--accent); }
+  .reveal .controls { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section class="title-slide" data-background-color="#0f172a">
+  <h1>Business Model Canvas</h1>
+  <h2>Smart City Lighting Platform</h2>
+  <hr class="rule" style="margin-left:0" />
+  <p style="color:var(--text-muted); font-size:0.55em;">Une plateforme d'éclairage public intelligent, en marque blanche, pour les municipalités</p>
+  <p style="color:var(--text-muted); font-size:0.45em; margin-top:2em;">Module : Entrepreneuriat — Groupe : [noms des membres]<br/>Samedi 18 Juillet 2026</p>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Sommaire</span>
+  <h2 style="color:#fff;">Plan de la présentation</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Introduction</li>
+    <li>Présentation de l'idée entrepreneuriale</li>
+    <li>Preuve de concept — une plateforme déjà développée et fonctionnelle</li>
+    <li>Le marché visé</li>
+    <li>Les 9 rubriques du Business Model Canvas, une par une</li>
+    <li>Le Canvas complet</li>
+    <li>Avantages concurrentiels et viabilité</li>
+    <li>Conclusion</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Introduction</span>
+  <h2 style="color:#fff;">Pourquoi cette idée ?</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light); font-size:0.85em;">
+    <li>L'éclairage public représente l'un des postes de dépense énergétique les plus importants pour une municipalité</li>
+    <li>La grande majorité des installations fonctionnent encore en tout-ou-rien, sans adaptation à la présence réelle ni à la luminosité ambiante</li>
+    <li>Aucune traçabilité fiable des pannes, interventions ou décisions de configuration — un vrai problème pour la transparence des collectivités publiques</li>
+    <li>Notre idée : transformer un réseau d'éclairage public classique en réseau intelligent, économe, et entièrement auditable</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">L'idée entrepreneuriale</span>
+  <h2 style="color:#fff;">Le problème et notre solution</h2>
+  <hr class="rule" />
+  <div class="two-col" style="margin-top:0.8em;">
+    <div class="card">
+      <span class="badge badge-problem">LE PROBLÈME</span>
+      <ul style="color:var(--text-light); font-size:0.62em;">
+        <li>Gaspillage énergétique (éclairage constant, peu importe la présence)</li>
+        <li>Pannes détectées tardivement, souvent signalées par les citoyens eux-mêmes</li>
+        <li>Aucune traçabilité vérifiable des interventions et décisions</li>
+        <li>Coûts de maintenance élevés et imprévisibles</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge badge-solution">NOTRE SOLUTION</span>
+      <ul style="color:var(--text-light); font-size:0.62em;">
+        <li>Capteurs IoT (luminosité, présence, trafic) sur chaque lampadaire</li>
+        <li>Optimisation automatique de l'intensité lumineuse en temps réel</li>
+        <li>Détection proactive des anomalies et pannes</li>
+        <li>Traçabilité complète via une blockchain locale infalsifiable</li>
+        <li>Dashboard web simple pour les équipes municipales</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Différenciateur clé</span>
+  <h2 style="color:#fff;">Une preuve de concept déjà réalisée</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light); font-size:0.8em;">
+    <li>Contrairement à une idée uniquement théorique, notre équipe a déjà développé et déployé un système fonctionnel de bout en bout</li>
+    <li>Backend accessible publiquement (API REST sécurisée, authentification par rôle), base de données cloud, dashboard web interactif</li>
+    <li>Simulation réaliste d'un réseau de lampadaires connectés (capteurs, actionneur LED) sur ESP32</li>
+    <li>Blockchain locale opérationnelle pour la traçabilité des anomalies et interventions</li>
+    <li>116 tests automatisés et un pipeline d'intégration continue garantissant la fiabilité du système</li>
+    <li style="color:var(--accent); font-weight:700;">Ce MVP réduit considérablement le risque technique du projet entrepreneurial</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Le marché</span>
+  <h2 style="color:#fff;">À qui s'adresse cette solution ?</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light); font-size:0.8em;">
+    <li>Marché primaire : municipalités et collectivités locales, en particulier les villes petites et moyennes</li>
+    <li>Marché secondaire : sociétés délégataires d'infrastructures urbaines, campus universitaires, zones industrielles, parkings privés</li>
+    <li>Contexte favorable : transition énergétique, pression budgétaire sur les collectivités, demande croissante de transparence publique</li>
+    <li>Marché récurrent et durable : chaque commune doit moderniser son parc d'éclairage tôt ou tard</li>
+  </ul>
+</section>
+
+<!-- 9 BMC rubric slides -->
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 1/9</span>
+  <h2 style="color:#fff;">Segments de clientèle</h2>
+  <span class="subtitle-tag">Customer Segments</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Municipalités et collectivités locales (cible principale)</li>
+    <li>Sociétés délégataires de gestion d'infrastructures urbaines</li>
+    <li>Campus universitaires, zones industrielles, parkings privés (cible secondaire)</li>
+    <li>Profil prioritaire : villes petites/moyennes cherchant à moderniser sans lourds investissements</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 2/9</span>
+  <h2 style="color:#fff;">Proposition de valeur</h2>
+  <span class="subtitle-tag">Value Propositions</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Réduction significative des coûts énergétiques grâce à l'adaptation automatique luminosité/présence</li>
+    <li>Détection proactive des pannes — moins d'interventions manuelles, moins de zones dans le noir</li>
+    <li>Traçabilité et auditabilité complètes (blockchain)</li>
+    <li>Dashboard simple, aucune expertise technique requise</li>
+    <li>Déploiement modulaire et progressif, sans big-bang</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 3/9</span>
+  <h2 style="color:#fff;">Canaux</h2>
+  <span class="subtitle-tag">Channels</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Vente directe aux municipalités via appels d'offres publics</li>
+    <li>Partenariats avec les installateurs et électriciens d'éclairage public existants</li>
+    <li>Démonstrations pilotes gratuites sur un quartier test</li>
+    <li>Présence dans les salons professionnels (Smart City, transition énergétique)</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 4/9</span>
+  <h2 style="color:#fff;">Relations clients</h2>
+  <span class="subtitle-tag">Customer Relationships</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Contrat de service à long terme (SaaS + maintenance)</li>
+    <li>Support technique dédié et réactif</li>
+    <li>Rapports périodiques automatisés (économies réalisées, incidents résolus)</li>
+    <li>Comité de suivi régulier avec les responsables municipaux</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 5/9</span>
+  <h2 style="color:#fff;">Sources de revenus</h2>
+  <span class="subtitle-tag">Revenue Streams</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Abonnement SaaS mensuel ou annuel, facturé par lampadaire connecté</li>
+    <li>Vente ou location du matériel IoT (capteurs, contrôleurs, LED)</li>
+    <li>Frais d'installation et de configuration initiale</li>
+    <li>Services additionnels : rapports personnalisés, intégrations tierces</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 6/9</span>
+  <h2 style="color:#fff;">Ressources clés</h2>
+  <span class="subtitle-tag">Key Resources</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Plateforme logicielle (backend, dashboard, moteur blockchain) — déjà développée et testée</li>
+    <li>Équipe technique : développement, IoT, support client</li>
+    <li>Partenariats matériel (fournisseurs de capteurs et de LED)</li>
+    <li>Conformité réglementaire (protection des données publiques, sécurité)</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 7/9</span>
+  <h2 style="color:#fff;">Activités clés</h2>
+  <span class="subtitle-tag">Key Activities</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Développement et maintenance continue de la plateforme</li>
+    <li>Déploiement et installation sur site</li>
+    <li>Support client et supervision continue du réseau</li>
+    <li>Amélioration continue des algorithmes (optimisation énergétique, détection d'anomalies)</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 8/9</span>
+  <h2 style="color:#fff;">Partenaires clés</h2>
+  <span class="subtitle-tag">Key Partners</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Fabricants de capteurs et de matériel IoT</li>
+    <li>Installateurs et électriciens locaux d'éclairage public</li>
+    <li>Fournisseurs d'hébergement cloud</li>
+    <li>Institutions publiques (subventions transition énergétique, appels à projets smart city)</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">BMC — Rubrique 9/9</span>
+  <h2 style="color:#fff;">Structure de coûts</h2>
+  <span class="subtitle-tag">Cost Structure</span>
+  <hr class="rule" />
+  <ul style="color:var(--text-light);">
+    <li>Développement et maintenance logicielle</li>
+    <li>Hébergement cloud (base de données, backend)</li>
+    <li>Matériel IoT (capteurs, contrôleurs, LED)</li>
+    <li>Équipe (développement, support, commercial)</li>
+    <li>Marketing et acquisition client</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Synthèse</span>
+  <h2 style="color:#fff;">Le Business Model Canvas complet</h2>
+  <div class="bmc-grid" style="margin-top:0.6em;">
+    <div class="bmc-cell bmc-span2">
+      <h4>Partenaires clés</h4>
+      <p>Fabricants IoT<br/>Installateurs locaux<br/>Hébergeurs cloud<br/>Institutions publiques</p>
+    </div>
+    <div class="bmc-cell">
+      <h4>Activités clés</h4>
+      <p>Développement plateforme<br/>Déploiement terrain<br/>Support & supervision</p>
+    </div>
+    <div class="bmc-cell bmc-span2">
+      <h4>Proposition de valeur</h4>
+      <p>Économies d'énergie<br/>Détection proactive des pannes<br/>Traçabilité blockchain<br/>Dashboard simple</p>
+    </div>
+    <div class="bmc-cell">
+      <h4>Relations clients</h4>
+      <p>Contrat long terme<br/>Support dédié<br/>Rapports automatisés</p>
+    </div>
+    <div class="bmc-cell bmc-span2">
+      <h4>Segments de clientèle</h4>
+      <p>Municipalités et collectivités<br/>Délégataires d'infrastructures<br/>Campus / zones industrielles</p>
+    </div>
+    <div class="bmc-cell">
+      <h4>Ressources clés</h4>
+      <p>Plateforme logicielle<br/>Équipe technique<br/>Partenariats matériel</p>
+    </div>
+    <div class="bmc-cell">
+      <h4>Canaux</h4>
+      <p>Appels d'offres<br/>Partenaires installateurs<br/>Démos pilotes</p>
+    </div>
+  </div>
+  <div class="bmc-bottom">
+    <div class="bmc-cell"><p><strong style="color:var(--accent)">Structure de coûts :</strong> développement, hébergement, matériel IoT, équipe, marketing</p></div>
+    <div class="bmc-cell"><p><strong style="color:var(--accent)">Sources de revenus :</strong> abonnement SaaS, vente/location matériel, installation, services</p></div>
+  </div>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Viabilité</span>
+  <h2 style="color:#fff;">Avantages concurrentiels</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light); font-size:0.8em;">
+    <li>MVP déjà fonctionnel : réduit le risque technique perçu par les municipalités clientes</li>
+    <li>Modèle SaaS récurrent : revenus prévisibles, contrairement à la vente ponctuelle de matériel seul</li>
+    <li>Différenciation par la blockchain : peu de solutions concurrentes offrent une traçabilité aussi robuste</li>
+    <li>Déploiement progressif et modulaire : abaisse la barrière à l'entrée pour des budgets contraints</li>
+    <li>Marché récurrent et durable : chaque commune doit moderniser son parc d'éclairage tôt ou tard</li>
+  </ul>
+</section>
+
+<section data-background-color="#0f172a">
+  <span class="kicker">Conclusion</span>
+  <h2 style="color:#fff;">Une idée entrepreneuriale solide et déjà validée techniquement</h2>
+  <hr class="rule" />
+  <ul style="color:var(--text-light); font-size:0.82em;">
+    <li>Un vrai problème rencontrant une solution déjà techniquement prouvée</li>
+    <li>Un modèle économique récurrent (SaaS) adapté à un marché durable</li>
+    <li>Une proposition de valeur différenciante grâce à la blockchain, rare sur ce marché</li>
+    <li>Prochaine étape : démarche pilote avec une municipalité partenaire</li>
+  </ul>
+</section>
+
+<section class="title-slide" data-background-color="#0f172a">
+  <h1>Merci</h1>
+  <h2>Des questions ?</h2>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    controls: true,
+    progress: true,
+    center: false,
+    transition: 'slide',
+    width: 1280,
+    height: 720,
+    margin: 0.06
+  });
+</script>
+</body>
+</html>
